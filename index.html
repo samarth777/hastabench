@@ -184,7 +184,7 @@ pre{font-size:12px;background:var(--surface-2);padding:12px;border-radius:8px;ov
   <h2>Two hands</h2>
   <h3>Samyuta hastas</h3>
   <p>Five two-hand gestures test coordination: Anjali (palms pressed together), Kapota (hollowed palms touching at the edges), Swastika and Kartariswastika (hands crossed at the wrists) and Pushpaputa (cupped palms side by side). They are scored on each hand's shape and orientation, the right hand's pose relative to the left, and the cross-hand contacts.</p>
-  <p class="small">The two-hand IK oracle reaches only 71.7 (2/5 solved). It commands the target configuration in one step from the random start, and on the way the hands collide and lock against each other. So the two-hand targets are reachable, but not by a single straight-line move. They are a harder and less mature part of v1.</p>
+  <p class="small">The two-hand IK oracle reaches 84.4 (2/5 solved). It commands the target configuration in one step from the random start, and on the way the hands can collide and lock against each other. So the two-hand targets are reachable, but not always by a single straight-line move.</p>
   <table id="lb2"></table>
 </div>
 <div class="fig-wide"><div class="pgrid" id="grid2"></div></div>
@@ -220,7 +220,8 @@ pre{font-size:12px;background:var(--surface-2);padding:12px;border-radius:8px;ov
   <h3>Hand, targets and scorer</h3>
   <p><b>Hand.</b> The skin is the WebXR <em>generic-hand</em> rigged mesh (MIT, © 2019 Amazon). It is driven by linear-blend skinning from a MuJoCo kinematic tree whose joint positions come from the mesh's own skeleton. Each hand has 21 finger degrees of freedom: thumb CMC flexion, abduction and twist, thumb MCP and IP, and for each finger abduction plus MCP, PIP and DIP flexion. The whole hand also has 3 rotations and 3 translations. All are driven by position servos.</p>
   <p>After every call the physics settles for 0.3 s with self-collision on, using capsules and a palm box fitted to the mesh. A finger commanded into another stops at the contact and reports "blocked by contact".</p>
-  <p><b>Targets.</b> Each hasta is written as an intent pose plus explicit constraints: which surfaces must touch (for example, ring fingertip on thumb tip) and which must stay apart. A least-squares solve finds the nearest pose that meets the constraints without interpenetration. That pose is settled physically and validated automatically: 28 of 28 single-hand and 5 of 5 two-hand targets pass. They have <em>not</em> yet been reviewed by a Bharatanatyam expert.</p>
+  <p><b>Targets.</b> Each hasta is written as an intent pose plus explicit constraints: which surfaces must touch (for example, ring fingertip on thumb tip) and which must stay apart. A least-squares solve finds the nearest pose that meets the constraints without interpenetration. That pose is settled physically and validated automatically: 28 of 28 single-hand and 5 of 5 two-hand targets pass.</p>
+  <p><b>Checked against reference images (v1.1).</b> Every target was compared, finger by finger, with at least four independent references: photos of dancers' hands, dance-school charts, Wikimedia Commons, and the plates and text of Coomaraswamy &amp; Duggirala's <em>The Mirror of Gesture</em> (1917). In v1.0, four targets were wrong (Mrigashirsha, Kangula, Sandamsha and the two-hand Swastika) and twenty had small deviations; most came from a too-straight thumb in the fist hastas and from loose finger spacing. All were corrected. Sandamsha is a movement (Padmakosha opening and closing), so its target is the closed moment. The details and sources are in <span class="mono">verify/REPORT.md</span>. The targets have still not been reviewed by a Bharatanatyam expert.</p>
 </div>
 <div class="fig-wide"><div class="gallery" id="gallery"></div>
   <figcaption><b>Figure 5.</b> The 28 asamyuta hasta targets (front view) with their classical definitions, as returned by <span class="mono">read_description</span>.</figcaption></div>
@@ -247,7 +248,7 @@ pre{font-size:12px;background:var(--surface-2);padding:12px;border-radius:8px;ov
   <p class="small"><b>Hands at rest</b> submits the start pose. <b>Average-hasta prior</b> uses the mean finger configuration of all 28 targets at the target's orientation (featureless, but it is given the orientation). <b>CMA-ES on silhouettes</b> searches 2,000 poses using only skin-silhouette IoU against the two target images. <b>Blind CMA-ES on hidden score</b> searches 2,000 poses scored by the hidden scorer, which no model can query. <b>IK oracle</b> commands the solved target configuration (privileged upper bound).</p>
 
   <h4>Limits</h4>
-  <p class="small">One episode per model and hasta, so close ranks are not resolved; the 95% intervals are bootstrap intervals over hastas. The targets come from textual definitions with regional variation and need expert validation. Only default reasoning effort was run. The hand's joint limits are generic, not dancer-specific. There is no human baseline yet.</p>
+  <p class="small">One episode per model and hasta, so close ranks are not resolved; the 95% intervals are bootstrap intervals over hastas. The targets were checked against reference images but not by an expert, and several hastas have regional variants (for example the Arala thumb or the Chatura fingers); each target encodes one common form. Only default reasoning effort was run. The hand's joint limits are generic, not dancer-specific. There is no human baseline yet.</p>
 </div>
 </main>
 
