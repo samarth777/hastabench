@@ -1,0 +1,33 @@
+[project]
+name = "hastabench"
+version = "1.0.0"
+description = "HastaBench: a MuJoCo benchmark and RL environment for classical Indian dance hand gestures (hastas) with an articulated human hand"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.11,<3.13"
+dependencies = [
+    "mujoco>=3.2",
+    "gymnasium>=1.0",
+    "numpy",
+    "scipy",
+    "pillow",
+    "openai>=1.40",
+    "matplotlib",
+    "pygltflib",
+    "cma",
+]
+
+[project.optional-dependencies]
+rl = ["torch", "stable-baselines3"]
+report = ["playwright"]
+dev = ["pytest"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

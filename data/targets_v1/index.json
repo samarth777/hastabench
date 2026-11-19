@@ -1,0 +1,353 @@
+{
+ "version": "v1",
+ "core8": [
+  "pataka",
+  "tripataka",
+  "ardhachandra",
+  "kartarimukha",
+  "mayura",
+  "mushti",
+  "shikhara",
+  "suchi"
+ ],
+ "all28": [
+  "pataka",
+  "tripataka",
+  "ardhapataka",
+  "kartarimukha",
+  "mayura",
+  "ardhachandra",
+  "arala",
+  "shukatunda",
+  "mushti",
+  "shikhara",
+  "kapittha",
+  "katakamukha",
+  "suchi",
+  "chandrakala",
+  "padmakosha",
+  "sarpashirsha",
+  "mrigashirsha",
+  "simhamukha",
+  "kangula",
+  "alapadma",
+  "chatura",
+  "bhramara",
+  "hamsasya",
+  "hamsapaksha",
+  "sandamsha",
+  "mukula",
+  "tamrachuda",
+  "trishula"
+ ],
+ "summary": [
+  {
+   "id": "pataka",
+   "valid": true,
+   "pen_mm": 0.0,
+   "contacts_mm": {
+    "thumb_dist|index_prox": 2.0
+   },
+   "apart_mm": {},
+   "cost": 0.00543,
+   "sec": 1.4
+  },
+  {
+   "id": "tripataka",
+   "valid": true,
+   "pen_mm": 0.0,
+   "contacts_mm": {
+    "thumb_dist|index_prox": 2.0
+   },
+   "apart_mm": {},
+   "cost": 0.00543,
+   "sec": 0.9
+  },
+  {
+   "id": "ardhapataka",
+   "valid": true,
+   "pen_mm": 0.0,
+   "contacts_mm": {
+    "thumb_dist|index_prox": 2.0
+   },
+   "apart_mm": {},
+   "cost": 0.00543,
+   "sec": 1.0
+  },
+  {
+   "id": "kartarimukha",
+   "valid": true,
+   "pen_mm": 0.0,
+   "contacts_mm": {
+    "thumb_dist|ring_mid": 1.4
+   },
+   "apart_mm": {
+    "index_dist|middle_dist": 39.0
+   },
+   "cost": 0.0275,
+   "sec": 1.1
+  },
+  {
+   "id": "mayura",
+   "valid": true,
+   "pen_mm": 0.0,
+   "contacts_mm": {
+    "thumb_dist|ring_dist": 0.7
+   },
+   "apart_mm": {},
+   "cost": 0.0738,
+   "sec": 1.0
+  },
+  {
+   "id": "ardhachandra",
+   "valid": true,
+   "pen_mm": 0.0,
+   "contacts_mm": {},
+   "apart_mm": {
+    "thumb_dist|index_prox": 63.2,
+    "thumb_dist|index_mid": 95.7
+   },
+   "cost": 0.0,
+   "sec": 0.1
+  },
+  {
+   "id": "arala",
+   "valid": true,
+   "pen_mm": 0.0,
+   "contacts_mm": {},
+   "apart_mm": {},
+   "cost": 0.00971,
+   "sec": 0.5
+  },
+  {
+   "id": "shukatunda",
+   "valid": true,
+   "pen_mm": 0.0,
+   "contacts_mm": {},
+   "apart_mm": {},
+   "cost": 0.00971,
+   "sec": 0.5
+  },
+  {
+   "id": "mushti",
+   "valid": true,
+   "pen_mm": 0.01,
+   "contacts_mm": {
+    "thumb_dist|middle_mid": 3.9
+   },
+   "apart_mm": {},
+   "cost": 0.18169,
+   "sec": 2.0
+  },
+  {
+   "id": "shikhara",
+   "valid": true,
+   "pen_mm": 0.0,
+   "contacts_mm": {},
+   "apart_mm": {
+    "thumb_dist|index_mid": 38.5,
+    "thumb_dist|middle_mid": 48.2
+   },
+   "cost": 0.0,
+   "sec": 0.1
+  },
+  {
+   "id": "kapittha",
+   "valid": true,
+   "pen_mm": 0.0,
+   "contacts_mm": {
+    "index_dist|thumb_dist": 1.5
+   },
+   "apart_mm": {},
+   "cost": 0.00665,
+   "sec": 0.6
+  },
+  {
+   "id": "katakamukha",
+   "valid": true,
+   "pen_mm": 0.0,
+   "contacts_mm": {
+    "thumb_dist|index_dist": 0.6,
+    "thumb_dist|middle_dist": 0.5
+   },
+   "apart_mm": {},
+   "cost": 0.1523,
+   "sec": 0.7
+  },
+  {
+   "id": "suchi",
+   "valid": true,
+   "pen_mm": 0.01,
+   "contacts_mm": {
+    "thumb_dist|middle_mid": 2.7
+   },
+   "apart_mm": {},
+   "cost": 0.09527,
+   "sec": 1.0
+  },
+  {
+   "id": "chandrakala",
+   "valid": true,
+   "pen_mm": 0.0,
+   "contacts_mm": {},
+   "apart_mm": {
+    "thumb_dist|middle_mid": 63.6,
+    "thumb_dist|index_prox": 63.2
+   },
+   "cost": 0.0,
+   "sec": 0.1
+  },
+  {
+   "id": "padmakosha",
+   "valid": true,
+   "pen_mm": 0.0,
+   "contacts_mm": {},
+   "apart_mm": {
+    "thumb_dist|index_dist": 53.8
+   },
+   "cost": 0.0,
+   "sec": 0.1
+  },
+  {
+   "id": "sarpashirsha",
+   "valid": true,
+   "pen_mm": 0.0,
+   "contacts_mm": {
+    "thumb_dist|index_prox": 0.9
+   },
+   "apart_mm": {},
+   "cost": 0.00676,
+   "sec": 0.5
+  },
+  {
+   "id": "mrigashirsha",
+   "valid": true,
+   "pen_mm": 0.0,
+   "contacts_mm": {},
+   "apart_mm": {},
+   "cost": 0.0,
+   "sec": 0.1
+  },
+  {
+   "id": "simhamukha",
+   "valid": true,
+   "pen_mm": 0.0,
+   "contacts_mm": {
+    "thumb_dist|middle_dist": 0.5,
+    "thumb_dist|ring_dist": 0.5
+   },
+   "apart_mm": {},
+   "cost": 0.09961,
+   "sec": 5.0
+  },
+  {
+   "id": "kangula",
+   "valid": true,
+   "pen_mm": 0.0,
+   "contacts_mm": {},
+   "apart_mm": {},
+   "cost": 0.0,
+   "sec": 0.1
+  },
+  {
+   "id": "alapadma",
+   "valid": true,
+   "pen_mm": 0.0,
+   "contacts_mm": {},
+   "apart_mm": {},
+   "cost": 0.0,
+   "sec": 0.1
+  },
+  {
+   "id": "chatura",
+   "valid": true,
+   "pen_mm": 0.0,
+   "contacts_mm": {
+    "thumb_dist|middle_prox": 0.7
+   },
+   "apart_mm": {},
+   "cost": 0.57337,
+   "sec": 1.2
+  },
+  {
+   "id": "bhramara",
+   "valid": true,
+   "pen_mm": 0.0,
+   "contacts_mm": {
+    "thumb_dist|middle_dist": 0.6
+   },
+   "apart_mm": {},
+   "cost": 0.12427,
+   "sec": 1.5
+  },
+  {
+   "id": "hamsasya",
+   "valid": true,
+   "pen_mm": 0.0,
+   "contacts_mm": {
+    "thumb_dist|index_dist": 0.6
+   },
+   "apart_mm": {},
+   "cost": 0.17912,
+   "sec": 0.5
+  },
+  {
+   "id": "hamsapaksha",
+   "valid": true,
+   "pen_mm": 0.0,
+   "contacts_mm": {},
+   "apart_mm": {},
+   "cost": 0.00737,
+   "sec": 0.5
+  },
+  {
+   "id": "sandamsha",
+   "valid": true,
+   "pen_mm": 0.0,
+   "contacts_mm": {
+    "thumb_dist|index_dist": 0.6
+   },
+   "apart_mm": {
+    "thumb_dist|middle_dist": 49.2
+   },
+   "cost": 0.13459,
+   "sec": 0.6
+  },
+  {
+   "id": "mukula",
+   "valid": true,
+   "pen_mm": 0.01,
+   "contacts_mm": {
+    "thumb_dist|index_dist": 0.7,
+    "thumb_dist|middle_dist": 0.1,
+    "middle_dist|ring_dist": 3.8,
+    "ring_dist|little_dist": 1.5
+   },
+   "apart_mm": {},
+   "cost": 0.3895,
+   "sec": 5.3
+  },
+  {
+   "id": "tamrachuda",
+   "valid": true,
+   "pen_mm": 0.01,
+   "contacts_mm": {
+    "thumb_dist|middle_mid": 2.7
+   },
+   "apart_mm": {},
+   "cost": 0.09527,
+   "sec": 1.0
+  },
+  {
+   "id": "trishula",
+   "valid": true,
+   "pen_mm": 0.0,
+   "contacts_mm": {
+    "thumb_dist|little_dist": 0.6
+   },
+   "apart_mm": {},
+   "cost": 0.12674,
+   "sec": 1.4
+  }
+ ]
+}
