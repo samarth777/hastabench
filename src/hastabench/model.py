@@ -187,7 +187,7 @@ class _Emitter:
 
         for fn in FINGERS:
             open_body(f"{fn}_prox", "root")
-            self.hinge(f"{fn}_abd", [0, 1, 0], LIM["abd"] if fn in ("middle", "ring") else (-25, 25))
+            self.hinge(f"{fn}_abd", [0, 1, 0], LIM["abd"] if fn in ("middle", "ring") else (-40, 25) if fn == "little" else (-25, 25))
             self.hinge(f"{fn}_mcp", [1, 0, 0], LIM["mcp"])
             seg_geoms(f"{fn}_prox", f"{fn}_mcp")
             open_body(f"{fn}_mid", f"{fn}_prox")
@@ -359,4 +359,8 @@ def _excludes(hands, two):
         pre = ("R_" if side == "right" else "L_") if two else ""
         out.append(f'    <exclude body1="{pre}root" body2="{pre}thumb_prox"/>')
         out.append(f'    <exclude body1="{pre}index_prox" body2="{pre}thumb_meta"/>')
+    if two:
+        # the thenar (thumb-base) capsules over-approximate soft tissue that compresses when
+        # palms are pressed together (Anjali); do not let them collide across hands
+        out.append('    <exclude body1="R_thumb_meta" body2="L_thumb_meta"/>')
     return "\n".join(out)

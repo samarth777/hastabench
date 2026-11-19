@@ -1,6 +1,6 @@
 [project]
 name = "hastabench"
-version = "1.0.0"
+version = "1.1.0"
 description = "HastaBench: a MuJoCo benchmark and RL environment for classical Indian dance hand gestures (hastas) with an articulated human hand"
 readme = "README.md"
 license = { text = "MIT" }

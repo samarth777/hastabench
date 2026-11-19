@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 message: "If you use HastaBench, please cite it as below."
 title: "HastaBench: Benchmarking Vision-Language Models on Classical Indian Dance Hand Gestures with an Articulated Hand"
-version: 1.0.0
+version: 1.1.0
 date-released: 2026-11-19
 license: MIT
 authors:

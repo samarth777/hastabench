@@ -14,34 +14,35 @@ One episode per hasta from the same seeded start pose (seed 0), default reasonin
 
 | Model | Score | 95% CI | Solved | $/episode |
 |---|---:|---:|---:|---:|
-| Gemini 3.8 Flash | **73.6** | 66.0–80.6 | **11/28** | 0.585 |
-| Claude Opus 5.5 | 64.3 | 57.4–70.6 | 4/28 | 0.332 |
-| GPT-5.6 Sol | 55.8 | 49.6–61.9 | 1/28 | 0.413 |
-| Claude Sonnet 5.5 (high effort) | 52.1 | 45.5–58.0 | 1/28 | 0.107 |
-| Claude Sonnet 5.5 | 50.8 | 43.3–57.7 | 0/28 | 0.126 |
-| GPT-5.6 Luna (high effort) | 44.3 | 37.7–51.0 | 2/28 | 0.038 |
-| GPT-5.6 Luna | 41.5 | 34.5–48.8 | 2/28 | 0.024 |
-| GPT-5.2 | 37.8 | 30.9–45.0 | 0/28 | 0.194 |
-| GPT-5 mini | 36.6 | 30.2–43.2 | 0/28 | 0.058 |
-| Kimi K2.5 | 36.3 | 30.4–42.4 | 0/28 | 0.183 |
-| Gemini 2.5 Pro | 35.5 | 29.0–42.7 | 0/28 | 0.211 |
-| Claude Haiku 4.5 | 34.1 | 27.2–41.5 | 0/28 | 0.239 |
-| *IK oracle (privileged)* | *99.4* | | *28/28* | |
-| *Blind CMA-ES on the hidden score (2,000 poses)* | *84.7* | | *17/28* | |
-| *Average-hasta prior (featureless, given the orientation)* | *37.8* | | *0/28* | |
-| *CMA-ES on image silhouettes (2,000 poses)* | *27.9* | | *0/28* | |
-| *Hands at rest (start pose)* | *20.5* | | *0/28* | |
+| Gemini 3.8 Flash | **70.2** | 60.7–78.7 | **13/28** | 0.544 |
+| Claude Opus 5.5 | 64.5 | 59.9–69.1 | 4/28 | 0.282 |
+| Claude Sonnet 5.5 (high effort) | 57.2 | 52.2–62.3 | 2/28 | 0.120 |
+| GPT-5.6 Sol | 55.1 | 49.3–61.1 | 2/28 | 0.416 |
+| Claude Sonnet 5.5 | 51.1 | 45.3–56.7 | 0/28 | 0.113 |
+| GPT-5.6 Luna (high effort) | 50.8 | 44.5–57.1 | 2/28 | 0.039 |
+| GPT-5.6 Luna | 41.8 | 35.5–47.9 | 0/28 | 0.028 |
+| GPT-5.2 | 39.5 | 32.0–47.4 | 2/28 | 0.204 |
+| GPT-5 mini | 38.2 | 30.9–45.3 | 0/28 | 0.043 |
+| Gemini 2.5 Pro | 37.3 | 31.2–43.2 | 0/28 | 0.200 |
+| Kimi K2.5 | 35.4 | 28.7–42.6 | 0/28 | 0.185 |
+| Claude Haiku 4.5 | 32.3 | 26.0–38.6 | 1/28 | 0.247 |
+| *IK oracle (privileged)* | *99.3* | | *28/28* | |
+| *Blind CMA-ES on the hidden score (2,000 poses)* | *82.1* | | *16/28* | |
+| *Average-hasta prior (featureless, given the orientation)* | *36.6* | | *0/28* | |
+| *CMA-ES on image silhouettes (2,000 poses)* | *25.6* | | *0/28* | |
+| *Hands at rest (start pose)* | *17.8* | | *0/28* | |
 
 <p align="center"><img src="docs/figures/score_vs_cost.png" width="92%"></p>
 
-**Main observations** (details in the report):
-* No model is reliable. The best solves 11 of 28 hastas, and 15 hastas are solved by no model at default effort. Half of the models do no better than the featureless average-hasta prior.
-* The targets are reachable within the rules: a blind search that may query the hidden score solves 17. A search guided only by silhouettes does worse than every model, so the models are using the images.
-* Moves are poorly aimed. Of 5,922 accepted moves, 39% raised the hidden score and 30% lowered it. In 184 of 280 episodes the submitted pose scored more than 2 points below the episode's best.
-* The thumb is the bottleneck: 86% of unsolved episodes miss with the thumb by more than 2 cm, and 63% fail a required contact.
-* Models rarely identify the gesture (63 of 280 plans name it) and rarely read its classical description, although a read costs only 6% of the score.
-* Two-hand (samyuta) gestures are much harder: the best model averages 43.5 and no episode is solved.
-* High reasoning effort changes little: +1.3 for Sonnet 5.5 and +2.8 for GPT-5.6 Luna.
+**Main observations** (v1.1 targets; details in the report):
+* No model is reliable. The best solves 13 of 28 hastas, and 13 hastas are solved by no model at default effort.
+* The targets are reachable within the rules: a blind search that may query the hidden score solves 16. A search guided only by silhouettes does worse than every model, so the models are using the images.
+* Moves are poorly aimed. Of 6,001 accepted moves, 41% raised the hidden score and 32% lowered it. In 193 of 280 episodes the submitted pose scored more than 2 points below the episode's best.
+* The thumb is the bottleneck: 81% of unsolved episodes miss with the thumb by more than 2 cm, and 69% fail a required contact.
+* Models rarely identify the gesture (64 of 280 plans name it) and rarely read its classical description (16 episodes), although a read costs only 6% of the score.
+* Two-hand (samyuta) gestures are much harder: the best model averages 41.9 and no episode is solved (the privileged oracle reaches 84.4).
+* High reasoning effort helps somewhat: +6.1 for Sonnet 5.5 and +9.0 for GPT-5.6 Luna.
+* Correcting the targets (v1.0 → v1.1) left the ranking almost unchanged; see `results/archive/` for the v1.0 run.
 
 ## Benchmark protocol
 
@@ -59,7 +60,9 @@ One episode per hasta from the same seeded start pose (seed 0), default reasonin
 ### Targets
 Each hasta is specified in [`src/hastabench/hastas.py`](src/hastabench/hastas.py) as an *intent* pose (joint angles transcribed from the textual definition) plus explicit constraints: surfaces that must touch (e.g. ring fingertip on thumb tip) and surfaces that must stay apart. [`targets.py`](src/hastabench/targets.py) solves for the nearest configuration that meets the constraints without interpenetration, settles it physically and validates it. 28/28 single-hand targets ([`data/targets_v1`](data/targets_v1)) and 5/5 two-hand targets ([`data/samyuta_v1`](data/samyuta_v1)) pass.
 
-> ⚠️ The targets have **not** yet been reviewed by a Bharatanatyam expert; several hastas have regional variants. Expert validation is the main open item for v2.
+**Reference-image verification (v1.1).** Every target was compared finger by finger with at least four independent references: dancer photos, dance-school charts, Wikimedia Commons, natyasutraonline.com, onlinebharatanatyam.com, and Coomaraswamy & Duggirala's *The Mirror of Gesture* (1917). Of the v1.0 targets, 4 were wrong (Mrigashirsha, Kangula, Sandamsha, Swastika) and 20 had minor deviations, mostly from a too-straight thumb in the fist hastas and loose finger spacing. All were corrected. Sandamsha is a movement (Padmakosha opening and closing), so its target is the closed moment. See [`verify/REPORT.md`](verify/REPORT.md) and the per-group files there for verdicts and source URLs. The v1.0 episode logs are kept in `results/archive/`.
+
+> ⚠️ The targets have still **not** been reviewed by a Bharatanatyam expert, and several hastas have regional variants (each target encodes one common form). Expert review is the main open item.
 
 ### Scoring
 [`scorer.py`](src/hastabench/scorer.py) compares 20 hand keypoints (MCP, PIP, DIP and tip of each finger; CMC, MCP, IP and tip of the thumb) in the hand's own frame, along with the hand's orientation and the gesture's contact constraints:
@@ -137,7 +140,7 @@ legacy/         superseded v0 harness (provenance only)
 * Only default effort was run, apart from two high-effort reruns.
 * Joint limits are generic, not dancer-specific.
 * There is no human baseline yet.
-* The two-hand IK oracle reaches only 71.7 because a single straight-line move from the start pose makes the hands collide.
+* The two-hand IK oracle reaches 84.4 (2/5 solved): commanding the target in one straight-line move from the start pose can make the hands collide on the way.
 
 ## Acknowledgements and licenses
 * Code: MIT (see [LICENSE](LICENSE)). Episode logs, targets and figures: CC BY 4.0.

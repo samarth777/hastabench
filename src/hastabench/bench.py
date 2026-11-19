@@ -43,7 +43,7 @@ JOINT_DOC = """Finger joints (degrees; positive flexion always curls toward the 
   thumb_cmc_abd  [-45,40]  thumb base: - presses the thumb alongside the index finger, + spreads it away
   thumb_cmc_rot  [-40,40]  thumb base axial twist
   thumb_mcp      [-15,65]  thumb middle knuckle      thumb_ip [-20,85]  thumb tip joint
-  F_abd [-20,20] (index/little [-25,25])  sideways spread, + = toward the thumb side
+  F_abd [-20,20] (index [-25,25], little [-40,25])  sideways spread, + = toward the thumb side
   F_mcp [-25,95] knuckle    F_pip [0,110] middle joint    F_dip [-5,85] tip joint
   with F in index, middle, ring, little. All zeros = flat open hand, fingers slightly splayed."""
 

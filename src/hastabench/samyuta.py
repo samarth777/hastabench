@@ -17,7 +17,7 @@ from scipy.optimize import least_squares
 
 from .sim import HandSim
 from .model import finger_joint_names, root_joint_names, DEG, KEYPOINTS
-from .hastas import SAMYUTA
+from .hastas import SAMYUTA, SAMYUTA_OVERRIDE
 from .core import load_targets
 from .targets import COLLIDE_GEOMS, TOUCH_TOL, APART_MIN, PEN_TOL
 
@@ -29,18 +29,36 @@ def build(sim: HandSim, name, single, out_dir):
         src = single[shape]
         for j in finger_joint_names():
             q[sim.joint_names.index(p + j)] = src["q_command"][src["joint_names"].index(j)]
+        for k, v in SAMYUTA_OVERRIDE.get(name, {}).items():
+            q[sim.joint_names.index(p + k)] = v * DEG
         for k, v in zip(["tx", "ty", "tz", "roll", "pitch", "yaw"], root):
             q[sim.joint_names.index(p + "root_" + k)] = v if k.startswith("t") else v * DEG
-    thumbs = [p + j for p in ("R_", "L_") for j in finger_joint_names() if j.startswith("thumb")]
-    ridx = np.array([sim.joint_names.index(n) for n in root_joint_names("R_") + root_joint_names("L_") + thumbs])
-    scale = np.array([20, 20, 20, 1, 1, 1] * 2 + [0.5] * len(thumbs), float)
-    x0 = q[ridx].copy()
+    # free joints in the cross-hand solve: thumbs always; for mirror-symmetric gestures also the
+    # finger knuckles (MCP), so palms and fingertips can meet together
+    sym0 = rs == ls and tuple(rroot) == tuple(lroot)
+    free = lambda j: "thumb" in j or (sym0 and j.endswith("_mcp") and "thumb" not in j)
+    thumbs_r = [j for j in finger_joint_names("R_") if free(j)]
+    thumbs_l = [j for j in finger_joint_names("L_") if free(j)]
+    ridx = np.array([sim.joint_names.index(n) for n in root_joint_names("R_") + root_joint_names("L_") + thumbs_r + thumbs_l])
+    scale_full = np.array([20, 20, 20, 10, 10, 10] * 2 + [0.5] * (len(thumbs_r) + len(thumbs_l)), float)
+    # mirror-symmetric samyutas share ONE parameter set for both hands (joint values are
+    # mirror-symmetric by construction), so the pose is exactly symmetric about the midline
+    sym = rs == ls and tuple(rroot) == tuple(lroot)
+    nr, nt = 6, len(thumbs_r)
+    if sym:
+        sel = np.r_[0:nr, 2 * nr:2 * nr + nt]
+        expand = lambda x: np.r_[x[:nr], x[:nr], x[nr:], x[nr:]]
+    else:
+        sel = np.arange(len(ridx))
+        expand = lambda x: x
+    scale = scale_full[sel]
+    x0 = q[ridx][sel].copy()
     G = COLLIDE_GEOMS + ["palm_heel"]
-    cross = [("R_" + a, "L_" + b) for a, b in itertools.product(G, G)]
+    cross = [("R_" + a, "L_" + b) for a, b in itertools.product(G, G) if not (a == b == "thumb_meta")]
     cset = {tuple(c) for c in cc}
 
     def res(x):
-        qq = q.copy(); qq[ridx] = x
+        qq = q.copy(); qq[ridx] = expand(x)
         sim.set_kinematic(qq)
         r = [(x - x0) * scale * 0.3]
         r.append([300 * max(0, sim.geom_dist(a, b) - 0.0005) for a, b in cc])
@@ -48,7 +66,7 @@ def build(sim: HandSim, name, single, out_dir):
         r.append([300 * max(0, -sim.geom_dist(a, b, 0.01) - (0.0005 if (a, b) in cset else 0)) for a, b in cross])
         return np.concatenate([np.atleast_1d(np.asarray(v, float)) for v in r])
 
-    lo, hi = sim.lo[ridx], sim.hi[ridx]
+    lo, hi = sim.lo[ridx][sel], sim.hi[ridx][sel]
     best = None
     rng = np.random.default_rng(0)
     for k in range(4):
@@ -56,8 +74,8 @@ def build(sim: HandSim, name, single, out_dir):
         sol = least_squares(res, start, bounds=(lo, hi), diff_step=1e-3, max_nfev=400)
         if best is None or sol.cost < best.cost:
             best = sol
-    print(name, "solve cost", round(float(best.cost), 4), flush=True)
-    q[ridx] = best.x
+    print(name, "solve cost", round(float(best.cost), 4), "symmetric" if sym else "", flush=True)
+    q[ridx] = expand(best.x)
     sim.set_kinematic(q)
     sim.command(q, steps=400)
     cd = {f"{a}|{b}": float(sim.geom_dist(a, b)) for a, b in cc}
@@ -76,7 +94,7 @@ def build(sim: HandSim, name, single, out_dir):
     own_ok = True
     valid = all(v <= TOUCH_TOL for v in cd.values()) and all(v >= APART_MIN for v in ad.values()) and pen <= PEN_TOL and own_ok
     Rr, Rl = sim.hand_rot("R_"), sim.hand_rot("L_")
-    rec = dict(id=name, meaning=meaning, version="v1", hands=["right", "left"], joint_names=sim.joint_names,
+    rec = dict(id=name, meaning=meaning, version="v1.1", hands=["right", "left"], joint_names=sim.joint_names,
                q=sim.q().tolist(), q_command=q.tolist(), q_deg=sim.to_human(sim.q()).round(2).tolist(),
                hands_detail=None, rel_rot=(Rl.T @ Rr).tolist(), rel_pos=(Rl.T @ (sim.hand_pos("R_") - sim.hand_pos("L_"))).tolist(),
                cross_contacts=[list(c) for c in cc], cross_apart=[list(c) for c in ca], cross_contact_dist=cd,

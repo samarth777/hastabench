@@ -116,7 +116,7 @@ def build_target(sim: HandSim, name: str, out_dir: str, views=("front", "side", 
     pen = sim.penetration()
     valid = ok and pen <= PEN_TOL
     rec = dict(
-        id=name, meaning=meaning, version="v1", hands=["right"],
+        id=name, meaning=meaning, version="v1.1", hands=["right"],
         joint_names=sim.joint_names,
         q=q_s.tolist(), q_command=q_k.tolist(), q_deg=sim.to_human(q_s).round(2).tolist(),
         keypoints_hand=sim.keypoints(frame="hand").tolist(),
