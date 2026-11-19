@@ -1,7 +1,7 @@
 import asyncio, sys, os
 from playwright.async_api import async_playwright
 async def main():
-    url = "file://" + os.path.abspath("site/index.html")
+    url = sys.argv[1] if len(sys.argv) > 1 else "file://" + os.path.abspath("site/index.html")
     async with async_playwright() as p:
         b = await p.chromium.launch(args=["--use-gl=swiftshader", "--enable-webgl", "--ignore-gpu-blocklist", "--allow-file-access-from-files"])
         pg = await b.new_page(viewport={"width": 1280, "height": 900})

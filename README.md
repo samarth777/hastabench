@@ -6,7 +6,7 @@ HastaBench is a benchmark and RL-ready environment built around the *hastas* (mu
 
 <p align="center"><img src="docs/figures/targets.jpg" width="92%"><br><em>The 28 single-hand (asamyuta) targets, front and side views.</em></p>
 
-The interactive report, **[`site/index.html`](site/index.html)**, covers the leaderboard, every final pose, per-call score curves, failure analysis and a three.js replay of every episode. Clone the repo and open the file directly; no server is needed.
+The interactive report, **[samarth777.github.io/hastabench](https://samarth777.github.io/hastabench/)** (source: [`site/index.html`](site/index.html)), covers the leaderboard, every final pose, per-call score curves, failure analysis and a three.js replay of every episode. Clone the repo and open the file directly; no server is needed.
 
 ## Results (v1)
 
