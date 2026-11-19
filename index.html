@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HastaBench — can frontier models form the hand gestures of classical Indian dance?</title>
+<style>
+:root{
+  --surface:#fcfcfb; --surface-2:#f3f2ef; --ink:#0b0b0b; --ink-2:#52514e; --ink-3:#8a8984; --grid:#e4e3df; --rule:#d9d8d3;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --ref:#8a8984; --ok:#008300; --bad:#e34948;
+  --serif: "Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --sans: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{background:var(--surface);color:var(--ink)}
+body{margin:0;font-family:var(--serif);font-size:18px;line-height:1.6}
+a{color:var(--s1)}
+.wrap{max-width:760px;margin:0 auto;padding:0 22px}
+.wide{max-width:1180px;margin:0 auto;padding:0 22px}
+header.top{border-bottom:1px solid var(--rule);font-family:var(--sans);font-size:13px;color:var(--ink-2)}
+header.top .wide{display:flex;justify-content:space-between;padding-top:12px;padding-bottom:12px}
+.kicker{font-family:var(--sans);font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);margin-top:56px}
+h1{font-size:54px;line-height:1.05;margin:.2em 0 .15em;letter-spacing:-.01em}
+.sub{font-size:24px;color:var(--ink-2);margin:0 0 28px;line-height:1.35}
+h2{font-family:var(--sans);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);margin:72px 0 4px;font-weight:600}
+h3{font-size:28px;line-height:1.2;margin:8px 0 12px}
+h4{font-family:var(--sans);font-size:15px;margin:28px 0 6px}
+p{margin:0 0 1em}
+figure{margin:28px 0 36px}
+figcaption{font-family:var(--sans);font-size:14px;line-height:1.5;color:var(--ink-2);margin-top:10px;max-width:760px}
+figcaption b{color:var(--ink)}
+.fig-wide{max-width:1180px;margin:28px auto 36px;padding:0 22px;overflow-x:auto}
+body{overflow-x:hidden}
+.callout{font-family:var(--sans);font-size:15px;background:var(--surface-2);border-radius:8px;padding:14px 16px;margin:20px 0}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;font-family:var(--sans);margin:24px 0}
+.tile{background:var(--surface-2);border-radius:8px;padding:12px 14px}
+.tile .v{font-size:30px;font-weight:600;letter-spacing:-.01em}
+.tile .l{font-size:13px;color:var(--ink-2);line-height:1.35}
+table{border-collapse:collapse;font-family:var(--sans);font-size:14px;width:100%}
+th{font-weight:600;text-align:left;color:var(--ink-2);border-bottom:1px solid var(--ink-3);padding:6px 8px;white-space:nowrap}
+td{border-bottom:1px solid var(--grid);padding:6px 8px;vertical-align:top}
+td:first-child{white-space:nowrap}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+tr.ref td{color:var(--ink-2)}
+.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:baseline}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px}
+.chart{font-family:var(--sans);font-size:12px;position:relative}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.tip{position:absolute;pointer-events:none;background:#fff;border:1px solid var(--rule);border-radius:6px;padding:6px 9px;font-family:var(--sans);
+  font-size:12px;line-height:1.4;box-shadow:0 2px 8px rgba(0,0,0,.08);opacity:0;transition:opacity .08s;z-index:20;white-space:nowrap}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-family:var(--sans);font-size:13px;color:var(--ink-2);margin:6px 0 8px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.lg-line{display:inline-block;width:22px;height:0;border-top:2px solid var(--ref)}
+.lg-dash{border-top-style:dashed}
+.btns{display:flex;flex-wrap:wrap;gap:6px;font-family:var(--sans);margin:8px 0}
+.btns button,.ctl button,.ctl select{font-family:var(--sans);font-size:13px;border:1px solid var(--rule);background:#fff;border-radius:6px;padding:5px 10px;cursor:pointer;color:var(--ink)}
+.btns button.on,.ctl button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+/* grid of final poses */
+.pgrid{overflow-x:auto;padding-bottom:6px}
+.pgrid table{width:auto;border-collapse:separate;border-spacing:3px}
+.pgrid td{padding:0;border:0;position:relative}
+.pgrid th{font-size:11px;border:0;padding:2px 4px;text-align:right;white-space:nowrap}
+.pgrid th.col{writing-mode:vertical-rl;transform:rotate(180deg);text-align:left;height:96px;font-weight:500;color:var(--ink-2)}
+.cell{width:58px;height:58px;border-radius:4px;overflow:hidden;position:relative;cursor:pointer;display:block;background:#c9ced6}
+.cell img{width:100%;height:100%;display:block;transition:transform .12s}
+.cell:hover{outline:2px solid var(--ink);z-index:3}
+.cell .b{position:absolute;right:2px;bottom:2px;font-family:var(--sans);font-size:10px;background:rgba(255,255,255,.88);border-radius:3px;padding:0 3px;color:var(--ink)}
+.cell.solved{outline:2px solid var(--ok)}
+.cell.tgt{cursor:default}
+.zoom{position:fixed;pointer-events:none;width:220px;height:220px;border-radius:8px;box-shadow:0 6px 24px rgba(0,0,0,.25);display:none;z-index:50;background:#c9ced6}
+/* replay */
+.replay{display:grid;grid-template-columns:1.25fr 1fr;gap:18px;font-family:var(--sans)}
+.stage{position:relative;background:#c9ced6;border-radius:10px;overflow:hidden;aspect-ratio:1/1}
+.stage canvas{width:100%!important;height:100%!important;display:block}
+.stage .ov{position:absolute;left:10px;top:10px;font-size:12px;background:rgba(255,255,255,.9);border-radius:6px;padding:4px 8px}
+.stage .tg{position:absolute;right:10px;top:10px;width:30%;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.stage .tg img{width:100%;display:block;border-radius:6px}
+.stage .tg div{font-size:11px;text-align:center;background:rgba(255,255,255,.9);border-radius:0 0 6px 6px}
+.ctl{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:0 0 10px}
+.ctl label{font-size:12px;color:var(--ink-2)}
+.steplog{height:330px;overflow-y:auto;border:1px solid var(--grid);border-radius:8px;font-size:12px;background:#fff}
+.steplog div{padding:4px 8px;border-bottom:1px solid var(--grid);cursor:pointer}
+.steplog div.cur{background:#eaf2fc}
+.steplog .t{font-weight:600}
+.steplog .r{color:var(--bad)}
+.thought{font-size:13px;line-height:1.45;color:var(--ink-2);background:var(--surface-2);border-radius:8px;padding:10px 12px;max-height:170px;overflow-y:auto;white-space:pre-wrap;margin-top:10px}
+input[type=range]{width:100%}
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;font-family:var(--sans)}
+.gcard{background:var(--surface-2);border-radius:8px;overflow:hidden;font-size:12px;line-height:1.4}
+.gcard img{width:100%;display:block}
+.gcard .c{padding:8px 10px}
+.gcard .n{font-size:14px;font-weight:600}
+.gcard .m{color:var(--ink-2);font-style:italic}
+.formula{font-family:var(--serif);font-size:19px;text-align:center;margin:18px 0}
+.bar{display:inline-block;height:10px;background:var(--s1);border-radius:0 3px 3px 0;vertical-align:middle;margin-right:6px}
+.small{font-size:14px;color:var(--ink-2);font-family:var(--sans)}
+footer{border-top:1px solid var(--rule);margin-top:80px;padding:24px 0 60px;font-family:var(--sans);font-size:13px;color:var(--ink-2)}
+pre{font-size:12px;background:var(--surface-2);padding:12px;border-radius:8px;overflow-x:auto}
+@media (max-width:900px){.replay{grid-template-columns:1fr}.tiles{grid-template-columns:repeat(2,1fr)}h1{font-size:40px}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wide"><span>HastaBench v1 · research preview</span><span>18 November 2026</span></div></header>
+
+<main>
+<div class="wrap">
+  <div class="kicker">Benchmark</div>
+  <h1>HastaBench</h1>
+  <p class="sub">Can frontier models form the hand gestures of classical Indian dance with an articulated 3-D hand?</p>
+  <p>The <em>Abhinaya Darpana</em> describes twenty-eight single-hand gestures, the <em>asamyuta hastas</em>, in a sentence each. Some examples: "all four fingers extended and held together, the thumb bent" (Pataka); "the ring finger touches the tip of the thumb" (Mayura). A dancer learns them from a teacher by looking and imitating.</p>
+  <p>HastaBench asks a vision-language model to do the same. It sees reference renders of a target hasta and drives a simulated 21-joint human hand one tool call at a time. It never sees its score. The hand is physical: fingers collide, and joints and per-call movements are bounded. Every call is logged together with the hand state and a hidden score, so each episode can be replayed below.</p>
+  <div class="tiles" id="tiles"></div>
+  <h4>Key findings</h4>
+  <ul id="findings" style="padding-left:1.1em"></ul>
+</div>
+
+<div class="fig-wide">
+  <div class="chart" id="fig1"></div>
+  <figcaption><b>Figure 1.</b> Mean HastaScore over the 28 hastas (one episode per hasta, the same seeded start pose for every model) against the mean API cost per episode. Costs use the proxy's per-token prices, including cache reads. Dots are colored by provider and labeled. Dashed lines are reference baselines on the same start poses. Hover a dot for the 95% bootstrap interval over hastas.</figcaption>
+</div>
+
+<div class="wrap">
+  <div class="callout" id="headline"></div>
+</div>
+<div class="fig-wide"><table id="lb"></table></div>
+<div class="wrap">
+  <p class="small" style="margin-top:8px">Solved = the hidden success test passes: mean keypoint error ≤ 10 mm, every finger ≤ 20 mm, orientation ≤ 20°, all required contacts within 5 mm and separations ≥ 8 mm, and no interpenetration. Best = the best hidden score reached at any point in the episode. Lost = best minus submitted.</p>
+
+  <h2>The task in brief</h2>
+  <h3>One hand, twenty-eight shapes, sixty calls</h3>
+  <p>An episode starts from a seeded random pose: fingers loosely curled and the hand turned up to 35° on each axis. The model receives two reference renders of the target (front and three-quarter) and a render of its own hand. It must first call <span class="mono">plan</span>. After that it may set any finger joints of one hand in a single <span class="mono">set_fingers</span> call (at most 45° change per joint per call), turn or move the hand, <span class="mono">undo</span>, <span class="mono">describe</span> the joint angles as numbers, and <span class="mono">look</span> from any of five cameras. A look returns the target, the current hand, and a silhouette difference from that camera.</p>
+  <p>The only external knowledge on offer is <span class="mono">read_description</span>, which returns the classical one-sentence definition and multiplies the final score by 0.94. Calls that break a rule are refused: the call is spent and the pose is unchanged.</p>
+</div>
+<div class="fig-wide">
+  <div style="display:grid;grid-template-columns:1fr 1fr 2.2fr;gap:12px;align-items:start;font-family:var(--sans);font-size:12px;color:var(--ink-2)">
+    <div><img src="img/target/mayura_front.jpg" style="width:100%;border-radius:6px"><div>target · front</div></div>
+    <div><img src="img/target/mayura_three_quarter.jpg" style="width:100%;border-radius:6px"><div>target · three-quarter</div></div>
+    <div><img src="img/look_example.png" style="width:100%;border-radius:6px"><div>what <span class="mono">look("front")</span> returns at the start of the episode</div></div>
+  </div>
+  <figcaption><b>Figure 2.</b> Mayura (peacock): the ring fingertip touches the thumb tip and the other fingers stand extended. Left: the two reference renders the model receives. Right: the three-panel look image. Red marks area only the target covers, blue area only the model's hand covers.</figcaption>
+</div>
+
+<div class="wrap">
+  <h2>Results</h2>
+  <h3>Every final pose</h3>
+  <p>Each row of Figure 3 is a model and each column a hasta, hardest on the left. The top row holds the targets and the bottom rows the reference searches. A green outline means solved. Hover to enlarge; click any cell to open that episode in the replay explorer.</p>
+</div>
+<div class="fig-wide">
+  <div class="pgrid" id="grid"></div>
+  <figcaption><b>Figure 3.</b> Final poses from the front camera with their scores, for single-hand hastas. Columns are ordered by mean model score.</figcaption>
+</div>
+
+<div class="wrap">
+  <h3>Where the calls go</h3>
+  <p>The hidden score is logged after every call. A solid line shows the score of the current pose and a dashed line the best score reached so far. Where the dashed line sits above the solid one, the model has walked away from a better pose. Choose a model to highlight it.</p>
+</div>
+<div class="fig-wide">
+  <div class="btns" id="curvebtns"></div>
+  <div class="chart" id="fig4"></div>
+  <figcaption><b>Figure 4.</b> Mean hidden score (0–100) after each call, averaged over the 28 episodes. After an episode is submitted, its last value carries forward. Gray lines are the other models.</figcaption>
+</div>
+
+<div class="wrap">
+  <div id="effortsec"><h4>Does thinking longer help?</h4>
+  <p>Two models were rerun at <span class="mono">reasoning_effort=high</span> on all 28 hastas. In Figure 1, a line joins each model's two effort levels.</p>
+  <table id="effort"></table></div>
+
+  <h4>Were the moves well aimed?</h4>
+  <div class="chart" id="fig5"></div>
+  <p class="small">Each accepted <span class="mono">set_fingers</span>, <span class="mono">turn_hand</span>, <span class="mono">move_hand</span> or <span class="mono">undo</span> counts as having helped or hurt if it moved the hidden score by more than half a point; otherwise it is neutral. The right column counts refused calls.</p>
+
+  <h4>Why episodes fail</h4>
+</div>
+<div class="fig-wide" style="margin-top:8px"><table id="fail"></table></div>
+<div class="wrap">
+  <p class="small">Percentages are of each model's unsolved episodes; one episode can fail several criteria. "Finger &gt; 20 mm" counts episodes in which that finger's worst keypoint misses by more than 2 cm.</p>
+
+  <h4>Do models know the gesture?</h4>
+</div>
+<div class="fig-wide" style="margin-top:8px"><table id="know"></table></div>
+<div class="wrap">
+  <p class="small">"Named" counts episodes whose plan already names the correct hasta. Scores with and without a description read are observational: the model chose whether to read.</p>
+
+  <h2>Two hands</h2>
+  <h3>Samyuta hastas</h3>
+  <p>Five two-hand gestures test coordination: Anjali (palms pressed together), Kapota (hollowed palms touching at the edges), Swastika and Kartariswastika (hands crossed at the wrists) and Pushpaputa (cupped palms side by side). They are scored on each hand's shape and orientation, the right hand's pose relative to the left, and the cross-hand contacts.</p>
+  <p class="small">The two-hand IK oracle reaches only 71.7 (2/5 solved). It commands the target configuration in one step from the random start, and on the way the hands collide and lock against each other. So the two-hand targets are reachable, but not by a single straight-line move. They are a harder and less mature part of v1.</p>
+  <table id="lb2"></table>
+</div>
+<div class="fig-wide"><div class="pgrid" id="grid2"></div></div>
+
+<div class="wrap">
+  <h2>Replay explorer</h2>
+  <h3>Watch any episode</h3>
+  <p>The stage below is the simulator's own hand mesh, skinned in your browser from the logged joint angles. Drag to orbit and scroll to zoom. The timeline marks moves (blue), looks (gray), refusals (red), description reads (yellow) and the plan (black).</p>
+</div>
+<div class="fig-wide">
+  <div class="ctl">
+    <label>Model</label><select id="selModel"></select>
+    <label>Hasta</label><select id="selTarget"></select>
+    <span style="flex:1"></span>
+    <button data-cam="front" class="cam on">front</button><button data-cam="side" class="cam">side</button><button data-cam="top" class="cam">top</button><button data-cam="three_quarter" class="cam">¾</button><button data-cam="back" class="cam">back</button>
+  </div>
+  <div class="replay">
+    <div>
+      <div class="stage" id="stage"><div class="ov" id="ov"></div><div class="tg"><img id="tgimg"><div>target</div></div></div>
+      <div class="ctl" style="margin-top:10px"><button id="play">▶ play</button><input type="range" id="slider" min="0" max="1" value="0" style="flex:1"></div>
+      <div class="chart" id="trace"></div>
+    </div>
+    <div>
+      <div class="small" id="epinfo" style="margin-bottom:8px"></div>
+      <div class="steplog" id="steplog"></div>
+      <div class="thought" id="thought"></div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <h2>The environment</h2>
+  <h3>Hand, targets and scorer</h3>
+  <p><b>Hand.</b> The skin is the WebXR <em>generic-hand</em> rigged mesh (MIT, © 2019 Amazon). It is driven by linear-blend skinning from a MuJoCo kinematic tree whose joint positions come from the mesh's own skeleton. Each hand has 21 finger degrees of freedom: thumb CMC flexion, abduction and twist, thumb MCP and IP, and for each finger abduction plus MCP, PIP and DIP flexion. The whole hand also has 3 rotations and 3 translations. All are driven by position servos.</p>
+  <p>After every call the physics settles for 0.3 s with self-collision on, using capsules and a palm box fitted to the mesh. A finger commanded into another stops at the contact and reports "blocked by contact".</p>
+  <p><b>Targets.</b> Each hasta is written as an intent pose plus explicit constraints: which surfaces must touch (for example, ring fingertip on thumb tip) and which must stay apart. A least-squares solve finds the nearest pose that meets the constraints without interpenetration. That pose is settled physically and validated automatically: 28 of 28 single-hand and 5 of 5 two-hand targets pass. They have <em>not</em> yet been reviewed by a Bharatanatyam expert.</p>
+</div>
+<div class="fig-wide"><div class="gallery" id="gallery"></div>
+  <figcaption><b>Figure 5.</b> The 28 asamyuta hasta targets (front view) with their classical definitions, as returned by <span class="mono">read_description</span>.</figcaption></div>
+
+<div class="wrap">
+  <p><b>Score.</b> The scorer compares 20 hand keypoints (MCP, PIP, DIP and tip of each finger; CMC, MCP, IP and tip of the thumb), expressed in the hand's own frame, so translation does not matter. It also checks the hand's orientation and the gesture's contact constraints.</p>
+  <div class="formula">HastaScore = 100 × [ 0.6·e<sup>−ē/15 mm</sup> + 0.2·max(0, 1 − θ/45°) + 0.2·c ] × v × 0.94<sup>r</sup></div>
+  <p>Here ē is the mean keypoint error, θ the orientation error, c the fraction of contact and separation constraints met, v = 1 if there is no interpenetration beyond 3 mm (otherwise 0.5), and r the number of description reads.</p>
+  <p id="scorerval"></p>
+  <table>
+    <tr><th>Item</th><th>Specification</th></tr>
+    <tr><td>Stage</td><td>Five fixed cameras (front, side, top, three-quarter, back), 35° field of view, 320 px panels</td></tr>
+    <tr><td>Hand</td><td>21 finger DOF plus 6 root DOF per hand; servo + 0.3 s physics settle per call; self-collision</td></tr>
+    <tr><td>Tools</td><td class="mono">plan · set_fingers · turn_hand · move_hand · undo · describe · look · read_description · submit</td></tr>
+    <tr><td>Budget</td><td>60 calls, of which ≤ 20 looks and ≤ 2 description reads; the pose is submitted automatically when the budget runs out</td></tr>
+    <tr><td>Per-call limits</td><td>45° per joint, 45° per rotation axis, 10 cm per translation axis; plan before the first move; refusals consume a call</td></tr>
+    <tr><td>Context</td><td>The two target images, the start render and the 3 most recent looks stay in context; older looks are replaced by a placeholder</td></tr>
+    <tr><td>Solve criterion</td><td>Mean keypoint error ≤ 10 mm, every finger ≤ 20 mm, orientation ≤ 20°, all constraints met, valid</td></tr>
+    <tr><td>Targets</td><td>28 asamyuta + 5 samyuta, solved and validated automatically (<span class="mono">data/targets_v1</span>, <span class="mono">data/samyuta_v1</span>)</td></tr>
+    <tr><td>Models</td><td>Default reasoning effort, one episode per hasta at seed 0, via an OpenAI-compatible proxy</td></tr>
+  </table>
+
+  <h4>Reference baselines</h4>
+  <p class="small"><b>Hands at rest</b> submits the start pose. <b>Average-hasta prior</b> uses the mean finger configuration of all 28 targets at the target's orientation (featureless, but it is given the orientation). <b>CMA-ES on silhouettes</b> searches 2,000 poses using only skin-silhouette IoU against the two target images. <b>Blind CMA-ES on hidden score</b> searches 2,000 poses scored by the hidden scorer, which no model can query. <b>IK oracle</b> commands the solved target configuration (privileged upper bound).</p>
+
+  <h4>Limits</h4>
+  <p class="small">One episode per model and hasta, so close ranks are not resolved; the 95% intervals are bootstrap intervals over hastas. The targets come from textual definitions with regional variation and need expert validation. Only default reasoning effort was run. The hand's joint limits are generic, not dancer-specific. There is no human baseline yet.</p>
+</div>
+</main>
+
+<footer><div class="wrap">
+  HastaBench v1 · code in this repository (<span class="mono">src/hastabench/bench.py</span> harness, <span class="mono">scripts/export_site.py</span> builds this page).
+  Hand mesh: WebXR Input Profiles generic-hand (MIT). Rendering: MuJoCo 4 · three.js r147 (MIT). Inspired by the presentation of ShadowBench (Perpetual Research, 2026).
+</div></footer>
+
+<div class="zoom" id="zoom"></div>
+<div class="tip" id="tip"></div>
+<script src="vendor/three.min.js"></script>
+<script src="vendor/OrbitControls.js"></script>
+<script src="data/summary.js"></script>
+<script src="data/hand1.js"></script>
+<script src="data/hand2.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
